@@ -61,6 +61,8 @@ Q_LOGGING_CATEGORY(plotter, "plotter")
 #define HOR_MARGIN 5
 #define VER_MARGIN 5
 
+double current_gain;
+
 int F2B(float f)
 {
     int b = (f >= 1.0 ? 255 : (f <= 0.0 ? 0 : (int)floor(f * 256.0)));
@@ -1472,6 +1474,7 @@ void CPlotter::drawOverlay()
         if (y < h -xAxisHeight)
         {
             int dB = mindbadj + dbstepsize * i;
+            dB -= current_gain; 
             rect.setRect(HOR_MARGIN, y - th / 2, m_YAxisWidth - 2 * HOR_MARGIN, th);
             painter.drawText(rect, Qt::AlignRight|Qt::AlignVCenter, QString::number(dB));
         }
@@ -1634,6 +1637,11 @@ void CPlotter::setDemodRanges(int FLowCmin, int FLowCmax,
     m_symetric=symetric;
     clampDemodParameters();
     updateOverlay();
+}
+
+void CPlotter::set_current_gain(double g) {
+  current_gain = g + 16.0f;  //16.0f is mixer gain
+  drawOverlay();
 }
 
 void CPlotter::setCenterFreq(quint64 f)

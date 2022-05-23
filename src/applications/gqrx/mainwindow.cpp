@@ -830,17 +830,24 @@ void MainWindow::updateGainStages(bool read_from_device)
         if (read_from_device)
         {
             gain.value = rx->get_gain(gain.name);
+
         }
         else
         {
             gain.value = (gain.start + gain.stop) / 2;
             rx->set_gain(gain.name, gain.value);
         }
+
         gain_list.push_back(gain);
     }
 
+
     uiDockInputCtl->setGainStages(gain_list);
     remote->setGainStages(gain_list);
+}
+
+double MainWindow::get_current_gain() {
+  return current_gain;
 }
 
 /**
@@ -925,6 +932,9 @@ void MainWindow::setFilterOffset(qint64 freq_hz)
 void MainWindow::setGain(const QString& name, double gain)
 {
     rx->set_gain(name.toStdString(), gain);
+
+    ui->plotter->set_current_gain( (double) gain );
+
 }
 
 /** Enable / disable hardware AGC. */

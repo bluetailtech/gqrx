@@ -65,6 +65,9 @@ public:
 
     bool configOk; /*!< Main app uses this flag to know whether we should abort or continue. */
 
+    double get_current_gain();
+    double current_gain;
+
 public slots:
     void setNewFrequency(qint64 rx_freq);
 
